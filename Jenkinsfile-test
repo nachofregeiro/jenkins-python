@@ -1,0 +1,17 @@
+pipeline {
+  triggers {
+    cron('* * * * *')
+  }
+
+  agent any
+
+  stages {
+    stage('Run') {
+      steps {
+        script {
+          sh 'python print.py'
+        }
+      }
+    }
+  }
+}
