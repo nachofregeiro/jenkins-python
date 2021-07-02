@@ -9,6 +9,7 @@ pipeline {
     stage('Run') {
       agent {
           docker {
+              label 'docker'
               image 'python:2-alpine'
           }
       }
