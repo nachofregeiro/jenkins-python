@@ -10,7 +10,7 @@ pipeline {
       }
       steps {
         script {
-          sh 'pip install -r requirements.txt && python print.py'
+          sh 'pip3 install -r requirements.txt && python print.py'
         }
       }
     }
