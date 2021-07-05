@@ -14,7 +14,7 @@ pipeline {
         }
       }
     }
-    stage('FTP Upload') {
+    stage('Upload') {
       steps {  
         ftpPublisher alwaysPublishFromMaster: true, continueOnError: false, failOnError: false, publishers: [
             [configName: 'dlptest', transfers: [
