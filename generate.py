@@ -3,8 +3,6 @@ print("Downloading report...")
 import requests
 from datetime import datetime
 from ftplib import FTP 
-import os
-import fileinput
 
 url = 'http://httpbin.org/response-headers?language=Python'
 response = requests.get(url, allow_redirects=True)
