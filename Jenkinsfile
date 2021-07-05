@@ -10,7 +10,7 @@ pipeline {
       }
       steps {
         script {
-          sh 'sudo pip install -r requirements.txt && python print.py'
+          sh 'pip install -r requirements.txt && python print.py'
         }
       }
     }
