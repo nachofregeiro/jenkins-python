@@ -10,6 +10,8 @@ date = datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")
 fileName = 'response_{}.txt'.format(date)
 open(fileName, 'wb').write(response.content)
  
+print(fileName)
+
 ftp = FTP()
 ftp.set_debuglevel(2)
 ftp.connect('ftp.dlptest.com', 21) 
