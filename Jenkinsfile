@@ -18,6 +18,13 @@ pipeline {
         }
       }
     }
+    stage('Print Credentials') {
+        steps {
+            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dlptest', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+              sh 'echo uname=$USERNAME pwd=$PASSWORD'
+            }
+        }
+    }
     // stage('FTP Upload') {
     //   steps {  
     //     ftpPublisher alwaysPublishFromMaster: true, continueOnError: false, failOnError: false, masterNodeName: '', paramPublish: null, publishers: [
