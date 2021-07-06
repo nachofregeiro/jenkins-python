@@ -13,17 +13,12 @@ pipeline {
         }
       }
       steps {
-        script {
-          sh 'python -m venv env && . env/bin/activate && pip install -r requirements.txt && python generate.py'
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dlptest', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+          script {
+            sh 'python -m venv env && . env/bin/activate && pip install -r requirements.txt && python generate.py ftp.dlptest.com $USERNAME $PASSWORD'
+          }
         }
       }
-    }
-    stage('Print Credentials') {
-        steps {
-            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dlptest', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-              sh 'echo uname=$USERNAME pwd=$PASSWORD'
-            }
-        }
     }
     // stage('FTP Upload') {
     //   steps {  
