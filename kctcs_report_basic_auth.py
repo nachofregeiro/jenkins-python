@@ -1,8 +1,8 @@
 import argparse
 import csv
+import pysftp
 import requests
 from datetime import date
-from ftplib import FTP
 
 stage_url = 'https://{}-stage.civitaslearning.com'
 prod_url = 'https://{}.civitaslearning.com'
@@ -83,21 +83,16 @@ def write_data(data, filestub):
   
   return filename
 
-def send_to_ftp(ftpServer, ftpUser, ftpPassword, filename):
+def send_to_sftp(ftpServer, ftpUser, ftpPassword, filename):
   print("Send data over FTP")
 
   if filename is None:
     print('Send to FTP: File name is empty')
     return
 
-  ftp = FTP()
-  ftp.set_debuglevel(2)
-  ftp.connect(ftpServer, 21) 
-  ftp.login(ftpUser, ftpPassword)
-
-  fp = open(filename, 'rb')
-  ftp.storbinary('STOR %s' % filename, fp, 1024)
-  fp.close()
+  with pysftp.Connection(host=ftpServer, username=ftpUser, password=ftpPassword) as sftp:
+    sftp.cwd('/CIVITAS_USAGE')
+    sftp.put(filename)
 
 if __name__ == '__main__':
 
@@ -133,4 +128,4 @@ if __name__ == '__main__':
   else:
     filename = write_data(formatted_data, 'illume_courses_daily_file')
   
-  send_to_ftp(args.ftp_server, args.ftp_user, args.ftp_password, filename)
+  send_to_sftp(args.ftp_server, args.ftp_user, args.ftp_password, filename)
