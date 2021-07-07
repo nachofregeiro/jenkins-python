@@ -2,6 +2,7 @@ import argparse
 import csv
 import requests
 from datetime import date
+from ftplib import FTP
 
 stage_url = 'https://{}-stage.civitaslearning.com'
 prod_url = 'https://{}.civitaslearning.com'
@@ -79,6 +80,24 @@ def write_data(data, filestub):
     print('Writing data to {}'.format(filename))
     for d in data:
       outfile.write(d)
+  
+  return filename
+
+def send_to_ftp(ftpServer, ftpUser, ftpPassword, filename):
+  print("Send data over FTP")
+
+  if filename is None:
+    print('Send to FTP: File name is empty')
+    return
+
+  ftp = FTP()
+  ftp.set_debuglevel(2)
+  ftp.connect(ftpServer, 21) 
+  ftp.login(ftpUser, ftpPassword)
+
+  fp = open(filename, 'rb')
+  ftp.storbinary('STOR %s' % filename, fp, 1024)
+  fp.close()
 
 if __name__ == '__main__':
 
@@ -95,12 +114,23 @@ if __name__ == '__main__':
                       type=str)
   parser.add_argument('password', help='Password for basic auth account on customer illume site',
                       type=str)
+  parser.add_argument('ftp_server', help='FTP server url',
+                      type=str)
+  parser.add_argument('ftp_user', help='FTP user name',
+                      type=str)
+  parser.add_argument('ftp_password', help='FTP user password',
+                      type=str)
 
   args = parser.parse_args()
 
   data = get_data(args.customer, args.env, args.product_name, args.username, args.password)
+  
   formatted_data = format_data(data)
+  
+  filename = None
   if args.product_name == 'illume':
-    write_data(formatted_data, 'illume_daily_file')
+    filename = write_data(formatted_data, 'illume_daily_file')
   else:
-    write_data(formatted_data, 'illume_courses_daily_file')
+    filename = write_data(formatted_data, 'illume_courses_daily_file')
+  
+  send_to_ftp(args.ftp_server, args.ftp_user, args.ftp_password, filename)

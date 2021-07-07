@@ -13,10 +13,11 @@ pipeline {
         }
       }
       steps {
-        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dlptest', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-          script {
-            sh 'python -m venv env && . env/bin/activate && pip install -r requirements.txt && python generate.py ftp.dlptest.com $USERNAME $PASSWORD'
-          }
+        withCredentials([
+          usernamePassword(credentialsId: 'illume', usernameVariable: 'ILLUME_USERNAME', passwordVariable: 'ILLUME_PASSWORD'),
+          usernamePassword(credentialsId: 'kctcs_ftp', usernameVariable: 'FTP_USERNAME', passwordVariable: 'FTP_PASSWORD')
+        ]){
+          sh 'python -m venv env && . env/bin/activate && pip install -r requirements.txt && python kctcs_report_basic_auth.py stage illume illume $ILLUME_USERNAME $ILLUME_PASSWORD kctsftpw.mycmsc.com $FTP_USERNAME $FTP_PASSWORD'
         }
       }
     }
