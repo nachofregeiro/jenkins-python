@@ -4,6 +4,12 @@ import pysftp
 import requests
 from datetime import date
 
+class My_Connection(pysftp.Connection):
+  def __init__(self, *args, **kwargs):
+    self._sftp_live = False
+    self._transport = None
+    super().__init__(*args, **kwargs)
+
 stage_url = 'https://{}-stage.civitaslearning.com'
 prod_url = 'https://{}.civitaslearning.com'
 # base_url = 'http://localhost:3000'
@@ -90,12 +96,12 @@ def send_to_sftp(ftpServer, ftpUser, ftpPassword, filename):
     print('Send to FTP: File name is empty')
     return
 
-  with pysftp.Connection(host=ftpServer, username=ftpUser, password=ftpPassword) as sftp:
+  with My_Connection(host=ftpServer, username=ftpUser, password=ftpPassword) as sftp:
     sftp.cwd('/CIVITAS_USAGE')
     sftp.put(filename)
 
 if __name__ == '__main__':
-
+  
   parser = argparse.ArgumentParser()
   parser.add_argument('env', help='Environment.',
                       type=str,
