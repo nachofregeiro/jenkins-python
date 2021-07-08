@@ -121,9 +121,9 @@ if __name__ == '__main__':
   parser.add_argument('ssh_key', help='SSH key',
                       type=str)
 
-  print(args.ssh_key)
-
   args = parser.parse_args()
+
+  print(args.ssh_key)
 
   data = get_data(args.customer, args.env, args.product_name, args.username, args.password)
   
