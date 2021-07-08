@@ -15,8 +15,10 @@ pipeline {
       steps {
         withCredentials([
           usernamePassword(credentialsId: 'illume', usernameVariable: 'ILLUME_USERNAME', passwordVariable: 'ILLUME_PASSWORD'),
-          usernamePassword(credentialsId: 'kctcs_ftp', usernameVariable: 'FTP_USERNAME', passwordVariable: 'FTP_PASSWORD')
+          usernamePassword(credentialsId: 'kctcs_ftp', usernameVariable: 'FTP_USERNAME', passwordVariable: 'FTP_PASSWORD'),
+          sshUserPrivateKey(credentialsId: "kctcs_ssh", keyFileVariable: 'SSH_KEY')
         ]){
+          sh 'echo SSH_KEY=$SSH_KEY'
           sh 'python -m venv env && . env/bin/activate && pip install -r requirements.txt && python kctcs_report_basic_auth.py stage illume illume $ILLUME_USERNAME $ILLUME_PASSWORD kctsftpw.mycmsc.com $FTP_USERNAME $FTP_PASSWORD'
         }
       }
