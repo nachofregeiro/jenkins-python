@@ -95,8 +95,11 @@ def send_to_sftp(ftpServer, ftpUser, ftpPassword, filename):
   if filename is None:
     print('Send to FTP: File name is empty')
     return
+  
+  cnopts = pysftp.CnOpts()
+  cnopts.hostkeys = None
 
-  with My_Connection(host=ftpServer, username=ftpUser, password=ftpPassword) as sftp:
+  with My_Connection(host=ftpServer, username=ftpUser, password=ftpPassword, private_key=".ppk", cnopts=cnopts) as sftp:
     sftp.cwd('/CIVITAS_USAGE')
     sftp.put(filename)
 
