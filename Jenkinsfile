@@ -9,7 +9,7 @@ pipeline {
     stage('Generate report') {
       agent {
         docker {
-            image 'python:3.5.1'
+            image 'python:3.9.6'
         }
       }
       steps {
