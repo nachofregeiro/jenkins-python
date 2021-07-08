@@ -118,6 +118,10 @@ if __name__ == '__main__':
                       type=str)
   parser.add_argument('ftp_password', help='FTP user password',
                       type=str)
+  parser.add_argument('ssh_key', help='SSH key',
+                      type=str)
+
+  print(args.ssh_key)
 
   args = parser.parse_args()
 
