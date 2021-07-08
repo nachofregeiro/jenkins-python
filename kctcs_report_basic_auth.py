@@ -89,11 +89,15 @@ def send_to_sftp(ftpServer, ftpUser, ftpPassword, filename):
   if filename is None:
     print('Send to FTP: File name is empty')
     return
-  
+    
+  # keydata = b"""AAAAB3NzaC1yc2EAAAADAQAB..."""
+  # key = paramiko.RSAKey(data=decodebytes(keydata))
   # cnopts = pysftp.CnOpts()
-  # cnopts.hostkeys = None
-  cnopts = pysftp.CnOpts(knownhosts='known_hosts')
+  # cnopts.hostkeys.add('example.com', 'ssh-rsa', key)
   
+  cnopts = pysftp.CnOpts()
+  cnopts.hostkeys = None
+
   with pysftp.Connection(host=ftpServer, username=ftpUser, password=ftpPassword, cnopts=cnopts) as sftp:
     sftp.cwd('/CIVITAS_USAGE')
     sftp.put(filename)
